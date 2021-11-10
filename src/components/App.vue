@@ -1,36 +1,39 @@
 <template>
-<div>
+<div class="has-background-success-light">
   <div class="tabs is-centered is-large">
     <ul>
       <li v-for="(item,index) in items"
       :key="index"
       :class="{'is-active': index === active}"
       @click="active = index">
-        <a>{{item.title}}</a>
+        <router-link :to="item.path">{{item.title}}</router-link>
       </li>
     </ul>
   </div>
   <section class="section">
-    <component :is="items[active].componentName"></component>
-  
+    <router-view></router-view>
   </section>
 </div>
 </template>
 
 <script>
-import ClickerExample from './ClickerExample.vue'
-import ModalExample from './ModalExample.vue'
-import ToDoExample from './ToDoExample.vue'
 
 export default {
-  components: { ModalExample, ToDoExample, ClickerExample},
+  created(){
+    this.acvtive = this.items,findIndex(item => item.path == this.$route.path);
+  },
     data(){
-      return {
+    return {
         active: 0,
         items: [
-          {title:'Clicker Example', componentName:'ClickerExample'},
-          {title:'Modal Example', componentName:'ModalExample'},
-          {title:'ToDo Example', componentName:'ToDoExample'},
+          {title:'Covid Data', path:'/'},
+          {title:'Infinite scroll', path:'/scroll'},
+          {title:'Rick and Morty', path:'/rickandmorty'},
+          {title:'Api',path:'/api'},
+          {title:'Clicker',path:'/clicker'},
+          {title:'Modal', path:'/modal'},
+          {title:'ToDo', path:'/todo'},
+          {title:'Chart', path:'/chart'},
         ]
       }
     }
