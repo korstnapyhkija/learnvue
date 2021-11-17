@@ -5,9 +5,8 @@
 <script>
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-
 export default {
-    props: ['lat','lng','zoom','geoJson'],
+    props: ['lat', 'lng', 'zoom', 'geoJson'],
     mounted(){
         this.map = L.map('map').setView([this.lat, this.lng], this.zoom);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -18,12 +17,34 @@ export default {
             zoomOffset: -1,
             accessToken: "pk.eyJ1Ijoia29yc3RuYXB5aGtpamEiLCJhIjoiY2t3MzdxYjB5MjJsaDJucWlndTFyMTY1ciJ9.Ei9oRvvv8ADJqR00Lcnfqw"
         }).addTo(this.map);
-            L.geoJson(this.geoJson).addTo(this.map);
+            L.geoJson(this.geoJson, {style: this.style}).addTo(this.map);
     },
     data(){
         return{
             map:null
         }
+    },
+    methods:{
+        getColors(d){
+        return d > 1000000 ? '#800026' :
+                d > 100000  ? '#BD0026' :
+                d > 10000  ? '#E31A1C' :
+                d > 1000  ? '#FC4E2A' :
+                d > 100   ? '#FD8D3C' :
+                d > 10  ? '#FEB24C' :
+                d == -1   ? '#000' :
+                            '#FFEDA0';
+        },
+        style(feature) {
+    return {
+        fillColor: this.getColors(feature.properties.confirmed),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
     },
     watch: {
         lat(lat){
@@ -36,7 +57,7 @@ export default {
             this.map.flyTo([this.lat, this.lng], zoom);
         },
         geoJson(geoJson){
-            L.geoJson(this.geoJson).addTo(this.map);
+            L.geoJson(this.geoJson, {style: this.style}).addTo(this.map);
         }
     }
 }
