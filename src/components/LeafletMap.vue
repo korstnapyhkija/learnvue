@@ -5,7 +5,7 @@
 <script>
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import axios from 'axios';
+
 export default {
     props: ['lat','lng','zoom','geoJson'],
     mounted(){
@@ -34,6 +34,9 @@ export default {
         },
         zoom(zoom){
             this.map.flyTo([this.lat, this.lng], zoom);
+        },
+        geoJson(geoJson){
+            L.geoJson(this.geoJson).addTo(this.map);
         }
     }
 }
